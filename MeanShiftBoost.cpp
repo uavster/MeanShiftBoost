@@ -25,7 +25,7 @@ void updateObject(double dt) {
 	objectPosition = objectPosition + dt * Point2f(100, -40);
 }
 
-void drawScene(cv::Mat &frame) {
+void drawScene(Mat &frame) {
 	Size size(640, 480);
 	frame = Mat::zeros(size, CV_8UC3);
 	rectangle(frame, Rect(size.width * 0.4, size.height * 0.2, size.width * 0.2, size.height * 0.5), CV_RGB(0, 0, 255), CV_FILLED);
@@ -35,7 +35,7 @@ void drawScene(cv::Mat &frame) {
 Mat objectHistogram;
 Mat globalHistogram;
 
-void getObjectHistogram(Mat frame) {
+void getObjectHistogram(Mat &frame) {
 	const int channels[] = { 0, 1 };
 	const int histSize[] = { 64, 64 };
 	float range[] = { 0, 256 };
@@ -56,7 +56,7 @@ void getObjectHistogram(Mat frame) {
 
 Rect trackingWindow(objectPosition.x, objectPosition.y, objectSize.x, objectSize.y);
 
-void backProjection(Mat &frame, Mat &histogram, Mat &bp) {
+void backProjection(const Mat &frame, const Mat &histogram, Mat &bp) {
 	const int channels[] = { 0, 1 };
 	float range[] = { 0, 256 };
 	const float *ranges[] = { range, range };
@@ -69,7 +69,7 @@ int main() {
 
 	Mat frame, hsvFrame;
 	double dt = 0.1;
-	for (double t = 0; t < 5.5; t += dt) {
+	for (double t = 0; t < 5; t += dt) {
 		drawScene(frame);
 		// Convert to HSV
 		cvtColor(frame, hsvFrame, CV_BGR2HSV);
